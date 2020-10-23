@@ -22,21 +22,23 @@
 
 // *******************Declare CONSTANTS & VARIABLES  ******************************
 const bool ON=1, OFF=0;
-const float MIN_TEMP=79.0, MIN_HUM=99.0;
+const float AUTO_MIN_TEMP=74.0, AUTO_MIN_HUM=99.0;  // MIN_TEMP=79
 const int ORIENT_PORTRAIT=3;
-const int MAN_MODE_BTN_D10=D10; // d10
+const int MAN_MODE_BTN_D10=D10; 
 const int AUTO_MODE_BTN_D11=D11;
 const int FAN_ACTIVATION_D7=D7;
-const unsigned long int AUTO_MODE_PRD=300000, POWER_OFF_DELAY=10000;
-
+const unsigned long int AUTO_MODE_DELAY=300000; // delay 5 minutes between AUTO mode reactivation
+const unsigned long int POWER_OFF_DELAY=10000; // delay 10 seconds following fan power-off
 bool btnManualSt, btnAutoSt;  // stores DigitalRead state
 bool autoFanStatus=OFF;  // indicates if fan is turned ON or OFF
 bool manMode=OFF, autoMode=OFF; // indicates which operation mode is currently in effect
 bool status;  // checks if BME280 was activated succesfully
 float temperature, humidity;  // stores data from BME sensor
-String ErrMsgManOLED = "OLED DISPLAY SWITCH ERROR--M A N U A L  MODE";
-String ErrMsgAutoOLED = "OLED DISPLAY SWITCH ERROR--A U T O MODE";
-String OpsMsgAutoMode = "**OPEN ACCESS DOOR & WINDOWS**";
+String ErrMsgManOLED = "OLED DISPLAY SWITCH CASE ERROR--M A N U A L  MODE";
+String ErrMsgAutoOLED = "OLED DISPLAY SWITCH CASE ERROR--A U T O MODE";
+String OpsMsgAutoMode = "OPEN WIDE ATTIC DOOR& WINDOWS";
+String OpsMsgFrame = "*********";
+
 unsigned long int startMillis, currMillis, totDelay;
 // ******************* end CONSTANTS & VARIABLES  ******************************
 
@@ -85,30 +87,56 @@ pinMode(FAN_ACTIVATION_D7,OUTPUT);  // Relay switch pin providing power for fan
 // Display initial OLED screen in MANUAL operation display mode (with switch position OFF)
 ML01_MANUAL_OPS_SCREEN(OFF);  
 }
-
+/*****************************************************************************************
+ *************************************  M A I N  L O O P  ********************************
+ *****************************************************************************************/
 void loop() 
 {
   btnManualSt=digitalRead(MAN_MODE_BTN_D10);  // YELLOW button pressed
-//  btnAutoSt=digitalRead(AUTO_MODE_BTN_D11);  // RED button pressed
-  Serial.printf("btnManualSt > %i\n",btnManualSt);
+  btnAutoSt=digitalRead(AUTO_MODE_BTN_D11);  // RED button pressed
+//  Serial.printf("btnManualSt > %i\n",btnManualSt);
   if (btnManualSt)
   {
     manMode = !manMode;
     ML01_MANUAL_OPS_SCREEN(manMode);  
     if (manMode == OFF)
-      {
-    Serial.printf("manMode O F F > %i\n",manMode);
-        digitalWrite(FAN_ACTIVATION_D7,LOW);
-      }
+    {
+//      Serial.printf("manMode O F F > %i\n",manMode);
+      digitalWrite(FAN_ACTIVATION_D7,LOW);
+    }
   }
   btnManualSt=OFF;
   if (manMode == ON)
+  {
+//    Serial.printf("manMode O N > %i\n",manMode);
+    digitalWrite(FAN_ACTIVATION_D7,HIGH);
+  }
+  else 
+  {
+    if (btnAutoSt)
     {
-        Serial.printf("manMode O N > %i\n",manMode);
-        digitalWrite(FAN_ACTIVATION_D7,HIGH);
+      autoMode = !autoMode;
+      Serial.printf("AUTOMode  > %i\n",autoMode);
+      if (autoMode == OFF)
+      {
+        if (autoFanStatus == ON)
+        {
+        Serial.printf("MAIN LOOP:AUTOMode is O F F > %i\n",autoMode);
+        digitalWrite(FAN_ACTIVATION_D7,LOW);
+        ML04_TIME_DELAY(POWER_OFF_DELAY);     
+        }
+      }
+      else
+      {
+        Serial.printf("AUTOMode is O N > %i execute ML03_CHECK_AUTO_THRESHOLDS()\n",autoMode);
+        ML03_CHECK_AUTO_THRESHOLDS();
+      }
+    ML02_AUTO_OPS_SCREEN(autoMode);
+//    ML04_TIME_DELAY(AUTO_MODE_DELAY);     
     }
+  }
   delay(1000);
-}
+}  //****************************    end  M A I N  L O O P  **********************************
 
 void ML01_MANUAL_OPS_SCREEN(bool inManMode)
 {
@@ -117,9 +145,9 @@ void ML01_MANUAL_OPS_SCREEN(bool inManMode)
   display.setTextColor(WHITE);
   display.setCursor(0,0);
   display.setRotation(ORIENT_PORTRAIT);
-  display.printf("BUTTON\n");
+  display.printf("<BUTTON>\n");
   display.printf("      MODE\n");
-  display.printf("YELLOW\n");
+  display.printf("<YELLOW>\n");
   switch (inManMode)
   {
     case OFF:
@@ -129,7 +157,7 @@ void ML01_MANUAL_OPS_SCREEN(bool inManMode)
       display.printf("OFF\n");
       display.setTextColor(WHITE);
       display.printf("    MANUAL\n");
-      display.printf("RED   AUTO\n");
+      display.printf("<RED> AUTO\n");
       break;
     case ON:
       display.setTextColor(WHITE);
@@ -138,7 +166,7 @@ void ML01_MANUAL_OPS_SCREEN(bool inManMode)
       display.setTextColor(BLACK,WHITE);
       display.printf("MANUAL\n");
       display.setTextColor(WHITE);
-      display.printf("RED   AUTO\n");
+      display.printf("<RED> AUTO\n");
       break;
     default:
       display.println(ErrMsgManOLED);
@@ -148,14 +176,83 @@ void ML01_MANUAL_OPS_SCREEN(bool inManMode)
   return;
 }
 
+void ML02_AUTO_OPS_SCREEN(bool inAutoMode)
+{
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0,0);
+  display.setRotation(ORIENT_PORTRAIT);
+  display.printf("<BUTTON>\n");
+  display.printf("      MODE\n");
+  switch (inAutoMode)
+  {
+    case OFF:
+      display.printf("<RED>  ");
+      display.setTextColor(BLACK,WHITE);
+      display.printf("OFF\n");
+      display.setTextColor(WHITE);
+      display.printf("<YELLOW>\n");     
+      display.println(); 
+      display.printf("TEMP   %2.0f\n",AUTO_MIN_TEMP);    
+      display.printf("HUM    %2.0f\n",AUTO_MIN_HUM);
+      display.println(OpsMsgFrame);
+      display.println(OpsMsgAutoMode);
+      display.println(OpsMsgFrame);
+      break;
+    case ON:
+      display.setTextColor(BLACK,WHITE);
+      display.printf("<RED>");
+      display.setTextColor(WHITE);
+      display.printf(" OFF\n");
+      display.printf("<YELLOW>\n");      
+      display.println(); 
+      display.printf("TEMP   %2.0f\n",AUTO_MIN_TEMP);    
+      display.printf("HUM    %2.0f\n",AUTO_MIN_HUM);
+      display.println(OpsMsgFrame);
+      display.println(OpsMsgAutoMode);
+      display.println(OpsMsgFrame);
+      break;
+    default:
+      display.println(ErrMsgAutoOLED);
+      break;
+  }      
+  display.display();
+  return;
+}
+
+void ML03_CHECK_AUTO_THRESHOLDS()
+{
+  temperature=bme.readTemperature() * (9.0/5.0) + 32.0;
+  humidity=bme.readHumidity();
+  Serial.printf("AUTOMode TEMPERATURE > %2.0f\n",temperature);
+  Serial.printf("AUTOMode HUMIDITY > %2.0f\n",humidity);
+  if ((temperature >= AUTO_MIN_TEMP) || (humidity >= AUTO_MIN_HUM))
+  {
+    autoFanStatus=ON;
+    digitalWrite(FAN_ACTIVATION_D7,HIGH);
+  }
+  else
+  {
+    autoFanStatus=OFF;
+    digitalWrite(FAN_ACTIVATION_D7,LOW);
+  }
+  return;
+}
+
 void ML04_TIME_DELAY(unsigned long int inDelay)
 {
+//  static unsigned long int accumMillis;
   startMillis=millis();
   currMillis=0;
   totDelay=startMillis + inDelay;
+  Serial.printf("ML04_TIME_DELAY milliseconds > %i\n",currMillis);
   while(currMillis < totDelay)
   {
     currMillis=millis();
   }
+//  accumMillis = currMillis + accumMillis;
+//  Serial.printf("Accumulated milliseconds > %i\n",accumMillis);
+  Serial.printf("ML04_TIME_DELAY milliseconds > %i\n",currMillis);
   return;
 }
