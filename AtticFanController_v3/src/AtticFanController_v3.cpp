@@ -32,12 +32,13 @@ void ML02_AUTO_OPS_SCREEN(bool inAutoMode);
 void ML02_2_AUTO_OPS_SCREEN();
 void ML03_CHECK_AUTO_THRESHOLDS();
 void ML04_TIME_DELAY(unsigned long int inDelay);
+void ML05_WRONG_BUTTON_DISPLAY_SCREEN();
 #line 22 "c:/Users/Owner/Documents/SummerIoTBootCamp/IoT/TF-AtticFanController/AtticFanController_v3/src/AtticFanController_v3.ino"
 #define OLED_RESET D4
 
 // *******************Declare CONSTANTS & VARIABLES  ******************************
 const bool ON=1, OFF=0;
-const float AUTO_MIN_TEMP=70.0, AUTO_MIN_HUM=99.0;  // MIN_TEMP=79
+const float AUTO_MIN_TEMP=79.0, AUTO_MIN_HUM=99.0;  // MIN_TEMP=79
 const int ORIENT_PORTRAIT=3;
 const int MAN_MODE_BTN_D10=D10; 
 const int AUTO_MODE_BTN_D11=D11;
@@ -54,15 +55,10 @@ String ErrMsgManOLED = "OLED DISPLAY SWITCH CASE ERROR--M A N U A L  MODE";
 String ErrMsgAutoOLED = "OLED DISPLAY SWITCH CASE ERROR--A U T O MODE";
 String OpsMsgAutoMode = "OPEN WIDE ATTIC DOOR& WINDOWS";
 String OpsMsgFrame = "*********";
-String WrongButtonMsgFrame = "__________";
-
+String WrongButtonMsgFrame = "_________";
 unsigned long int startMillis, currMillis, totDelay;
-enum modeTypes
-{
-  mode_manual,
-  mode_auto
-}; 
-modeTypes OpMode;
+enum modeType {YELLOW_FOR_MANUAL,RED_FOR_AUTO}; 
+modeType en_ModeType;
 
 // ******************* end CONSTANTS & VARIABLES  ******************************
 
@@ -80,7 +76,7 @@ void setup()
   display.display(); // show Adafruit splashscreen to OLED
   delay(1000);  // maintain display for 1 second
   
-  Serial.printf("PROGRAM AtticFanController_v2\n");
+  Serial.printf("PROGRAM AtticFanController_v3\n");
 
  /*
   * 2) BME 280sensor : BME 280 .begin method to activate sensor 
@@ -124,8 +120,8 @@ void loop()
     if (autoMode == ON)  // Check for RED button pressed out of turn (AUTO mode) when already in manual mode
     {  
       autoMode=OFF;
-      OpMode = mode_auto;
-      ML05_WRONG_BUTTON_DISPLAY_SCREEN(OpMode);
+      en_ModeType=RED_FOR_AUTO;
+      ML05_WRONG_BUTTON_DISPLAY_SCREEN();
       goto MainLoopBottom;
     }  
     else
@@ -152,7 +148,8 @@ void loop()
     if (manMode == ON)  // Check for RED button pressed out of turn (AUTO mode) when already in manual mode
     {
       manMode=OFF;
-//      ML05_WRONG_BUTTON_DISPLAY_SCREEN();
+      en_ModeType=YELLOW_FOR_MANUAL;
+      ML05_WRONG_BUTTON_DISPLAY_SCREEN();
       goto MainLoopBottom;
     }      
     else
@@ -311,23 +308,52 @@ void ML04_TIME_DELAY(unsigned long int inDelay)
   return;
 }
 
-void ML05_WRONG_BUTTON_DISPLAY_SCREEN(modeTypes inMode)
+void ML05_WRONG_BUTTON_DISPLAY_SCREEN()
 {
-  switch (inMode)
-  {
-    case 0: // mode_manual
-      break;
-    case 1: // mode_auto
-      break;
-  }
+  char strBtnYellow[8] = " YELLOW";
+  char strBtnRed[8] =    "  RED  ";
+  char strOpModeMan[8] = " MANUAL";
+  char strOpModeAuto[8] ="  AUTO ";
+
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0,0);
   display.setRotation(ORIENT_PORTRAIT);
   display.println(WrongButtonMsgFrame);
-  display.printf("| Press  |");
-
+  display.println("| PRESS |");
+  display.printf("|");
+  display.setTextColor(BLACK,WHITE);
+  switch (en_ModeType)
+  {
+    case YELLOW_FOR_MANUAL: 
+      display.printf("%s",strBtnYellow);
+      break;
+    case RED_FOR_AUTO:  
+      display.printf("%s",strBtnRed);
+      break;
+  }
+  display.setTextColor(WHITE);
+  display.println("|");
+  display.println("| BUTTON|");
+  display.println("|   TO  |");
+  display.println("| RETURN|");
+  display.println("|   TO  |");
+  display.printf("|");
+  display.setTextColor(BLACK,WHITE);
+  switch (en_ModeType)
+  {
+    case YELLOW_FOR_MANUAL: 
+      display.printf("%s",strOpModeMan);
+      break;
+    case RED_FOR_AUTO:  
+      display.printf("%s",strOpModeAuto);
+      break;
+  }
+  display.setTextColor(WHITE);
+  display.println("|");
+  display.println("|  MODE |");
+  display.println(WrongButtonMsgFrame);
   display.display();
   return;
 }
