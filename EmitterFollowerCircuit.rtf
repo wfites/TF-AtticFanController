@@ -1,0 +1,100 @@
+{\rtf1\ansi\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset161 Calibri;}}
+{\*\generator Riched20 10.0.18362}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 The common collector transistor circuit configuration gains its name from the fact that the collector circuit is common to both input and output circuits, the base being associated with only the input, then the emitter with the output only.\par
+\par
+The other name for the common collector is emitter follower. This name is derived from the fact that the emitter voltage "follows" that of the base circuit - the circuit has unit voltage gain.\par
+\par
+The emitter follower transistor amplifier has a very straightforward circuit. The base is connected to the previous stage, and often this may be directly connected as this can save on additional bias resistors which lower the input impedance and hence increase the loading to the previous stage.\par
+Common collector transistor configuration showing the base connection common to both input and output circuits\par
+Transistor common collector circuit configuration\par
+\par
+Looking at the circuit it can be seen that although the emitter voltage follows that of the base, in DC terms it is actually less than that of the base by a voltage equal to the PN junction drop between the base and emitter. Typically this is 0.6 volts for a silicon transistor and 0.2 to 0.3 for germanium transistors, although these are not widely used these days.\par
+\par
+As the emitter voltage follows that of the base, this means that the input and output are exactly in phase and not shifted by 180\'b0 as in the case of the common emitter amplifier.\par
+Emitter follower transistor amplifier characteristics summary\par
+\par
+The table below gives a summary of the major characteristics of the common collector, emitter follower transistor amplifier.\par
+\par
+Common collector, emitter follower transistor amplifier characteristics\par
+ \par
+Parameter \tab Characteristics\par
+Current gain \tab High\par
+Voltage gain \tab Zero\par
+Power gain \tab Medium\par
+Input / output phase relationship \tab 0\'b0\par
+Input resistance \tab High\par
+Output resistance \tab Low\par
+\par
+One key aspect of the characteristic is the input impedance. As it is normally used as a buffer amplifier, this is the key parameter.\par
+\par
+The input resistance can easily be calculated for a circuit because it is \f1\lang1032\'e2 times the resistor R1, where \'e2 is the forward current gain of the transistor.\par
+Emitter follower input impedance\par
+Emitter follower input resistance\par
+DC coupled emitter follower, common collector circuit\par
+\par
+The simplest way of connecting an emitter follower is to directly couple the input as shown below. Often the collector of the previous stage will be at approximately the mid rail voltage, and this means that it can be directly coupled to the buffer stage.\par
+Using a directly coupled emitter follower circuit\par
+Directly coupled emitter follower circuit\par
+\par
+    Choose transistor:   As with other forms of transistor circuit, the transistor should be chosen to meet the anticipated requirements.\par
+    Emitter resistor value:   The voltage on the emitter is easy to define. It is simply that appearing at the previous stage. Say for example this is half the rail voltage, then the voltage on the emitter Q1 will be 0.5V (for a silicon transistor) less than this - the drop of the base emitter junction. Simply calculate the value of the resistor for the current required.\par
+    Emitter follower input resistance:   The input resistance of the circuit is effectively \'e2 times the emitter resistor, R1.\par
+\par
+AC coupled emitter follower, common collector circuit\par
+\par
+It is not always possible to directly couple the emitter follower, common collector buffer. When this is the case, it is necessary to add a few additional electronic components: coupling capacitors and bias resistors to the circuit.\par
+Emitter follower circuit with input and output AC coupling and bias resistors\par
+AC coupled emitter follower circuit\par
+\par
+The emitter follower can be designed and electronic component values determined using the design flow below as a basis:\par
+\par
+    Choose transistor:   As before, the transistor type should be chosen according to the anticipated performance requirements.\par
+    Select emitter resistor:   Choosing an emitter voltage of about half the supply voltage to give the most even range before the onset of any clipping, determine the current required from the impedance of the following stage.\par
+    Determine base current:   The maximum base current is the collector current divided by \'e2 (or hfe which is essentially the same).\par
+    Determine the base voltage:   The base voltage is simply the emitter voltage plus the base emitter junction voltage - this is 0.6 volts for silicon and 0.2 volts for germanium transistors.\par
+    Determine base resistor values:   Assume a current flowing through the chain R1 + R2 of around ten times that of the base current required. Then select the correct ratio of the resistors to provide the voltage required at the base.\par
+    Determine value of input capacitor value:   The value of the input capacitor should equal the resistance of the input circuit at the lowest frequency to give a -3dB fall at this frequency. The total impedance of the circuit will be \'e2 times R3 plus any resistance external to the circuit, i.e. the source impedance. The external resistance is often ignored as this is likely to not to affect the circuit unduly.\par
+    Determine output capacitor value :   Again, the output capacitor is generally chosen to equal the circuit resistance at the lowest frequency of operation. The circuit resistance is the emitter follower output resistance plus the resistance of the load, i.e. the circuit following.\par
+    Re-evaluate assumptions:   In the light of the way the circuit has developed, re-assess any circuit assumptions to ensure they still hold valid. Aspects such as the transistor choice, current consumption values, etc.\par
+\par
+The emitter follower circuit is particularly useful for applications where a input high impedance is required. Offering a high input impedance and low output impedance it is does not load circuits that may only have a small output capability, or those circuits like oscillators that need a high impedance load to ensure the optimum stability, etc.\par
+Emitter follower practical aspects\par
+\par
+When using the emitter follower circuit, there are a useful few practical points to note:\par
+\par
+    Input capacitance affects RF:   Although the emitter follower offers a high resistance to any signals, the base emitter capacitance may reduce the impedance if signals above a few hundred kilohertz are used. This should be remembered during the electronic circuit design as this can affect any loading levels significantly.\par
+\par
+    Collector may need decoupling:   On some occasions an emitter follower circuit can oscillate, especially if long leads are present. This can happen when high frequency responses are needed and high frequency transistors are used.\par
+\par
+    One of the easiest ways of preventing this is to decouple the collector to ground using a capacitor, C3 with connections that are as short as reasonably possible. This can be easily incorporated during the electronic circuit design, and can be included as a precautionary measure using just a couple of electronic components.\par
+\par
+    Values will depend upon the frequency in use. If necessary a small value of resistance, R4, can be placed between the collector and the supply rail. The value of this resistor only needs to be of the order of 100\'d9 or less in most instances. This can also be added as a precaution.\par
+    Emitter follower circuit with collector decoupling\par
+    Emitter follower circuit with collector decoupling\par
+\par
+    The same effect can also be implemented by placing a small ferrite bead over the collector lead. However for most purposes the resistor / capacitor solution is the most convenient.\par
+\par
+\par
+The emitter follower is simple to implement and requires only a few electronic components. It is a very convenient circuit to add when a circuit requires a minimum load to be placed upon it.\par
+\par
+\f0\lang1033 The\f1\lang1032  common collector transistor circuit configuration gains its name from the fact that the collector circuit is common to both input and output circuits, the base being associated with only the input, then the emitter with the output only.\par
+\par
+The other name for the common collector is emitter follower. This name is derived from the fact that the emitter voltage "follows" that of the base circuit - the circuit has unit voltage gain\par
+\f0\lang1033 **********************************************************************************\f1\lang1032\par
+\f0\lang1033 Emitter Current (I) where ohm's law = V =IR  I= V/R\par
+V=5v  R=100 ohms  I=.05 A or 50 mA\par
+\tab R=47 ohms I= .1063 A or 106 mA\par
+\tab measured at base-emitter junction: 180 mA\par
+Base Current I=V/R\par
+V=2.9V \par
+R=2200 ohms\par
+I= 2.9/2200 = .00131 A  =1.31 mA\par
+Current Gain: Emitter/Base  180/1.31 = 138X\par
+6) PNP Transistor 2N3906\par
+\tab This bipolar junction transistor consists of a single N-type semi-conductor material (having surplus negative-charged carrier electons) sandwiched in between two P-type semiconductor material (having surplus positive-charged particles), with leads (legs)  attached to each section.  The middle lead is the base, with outer leads known as collector and emitter. This transistor  has two  PN junctions: base-collector, and base-emitter. Transistors often function as switches for integrated circuits, but our project circuit uses it as a current amplifier to supply current to the relay switch.\par
+HOW THE PROJECT CIRCUIT WORKS \f1\lang1032\par
+\f0\lang1033\tab Activating the attic fan is largely dependent on the current generated within the input circuit through the transistor and on to the relay switch. The circuit's base-emitter junction is critical for generating the current. In this project circuit, a manual button press or automated activation sends output current to  digital pin (D7). This current is then pushed by  a smaller amount of voltage (where the circuit metered just under 3V ) along its circuit to the transistor's base lead, at which point this very small current then combines with higher current pushed  from by the Argon's VUSB pin(metered at 5V) along the transistor's base-emitter junction, to the emitter lead, and finally to the IN connector at the relay switch.  \par
+\tab The project's circuit operates in ACTIVE mode, where the transistor acts to amplify the current at the base-emitter junction through to the relay switch. Active mode can occur when voltage at the base-emitter junction reaches .7V (metered as .749V), and with only a very small base current relative to the emitter current (metered at 180 mV at the base-emitter junction). The relationship between emitter versus base current is known as DC current gain. Typical ratios can vary between 50-200, where the project circuit is calculated at 138 mA.\par
+\tab The circuit constructed for this project is called an emitter follower. \f1\lang1032 This \f0\lang1033 refers to \f1\lang1032 the fact that the emitter voltage "follows" that of the base circuit\f0\lang1033 ; that is, \f1\lang1032  the \f0\lang1033 emitter \f1\lang1032 circuit has unit voltage gain\f0\lang1033 . \f1\lang1032\par
+}
+ 

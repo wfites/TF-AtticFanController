@@ -12,16 +12,24 @@
  * finishing on Sep 27.
  *  This program includes finished and tested funcionality for both MANUAL & AUTO modes.
  * Author: Ted Fites
+ * 
  * Modifications:
- * 10/14/20  TF  Created program
+ * 10/29/20   TF Completed FINAL version. Includes final modifications for OLED screens button operation 
+ *              messages and source code file documentation.
+ * 10/26/20   TF Completed v#3. Includes tested functionality for wrong button press during operation.
+ * 10/25/20   TF Completed v#2. Includes tested functionality for controller AUTO mode complimentary
+ *              to MANUAL mode. Also trnasferred cricuit from Argon breadboard to small breakout board
+ *              (2"x6") for added wiring space & to eliminate short circuits on Argon board.
+ * 10/14/20   TF Created program. Includes tested functionality for controller MANUAL mode.
  *
  */
-// HEADER section *************************************************************************
+//************************************* HEADER section ************************************
+// 1) Declare program header library files
 #include "Adafruit_SSD1306.h"  // library to access class object for OLED display 
 #include "Adafruit_BME280.h"  // library to access class object BME sensor
 #define OLED_RESET D4
 
-// *******************Declare CONSTANTS & VARIABLES  ******************************
+// ******************* 2) Declare global CONSTANTS & VARIABLES  ******************************
 const bool ON=1, OFF=0;
 const float AUTO_MIN_TEMP=79.0, AUTO_MIN_HUM=99.0;  // MIN_TEMP=79
 const int ORIENT_PORTRAIT=3;
@@ -31,9 +39,10 @@ const int FAN_ACTIVATION_D7=D7;
 const unsigned long int AUTO_MODE_DELAY=300000; // delay 5 minutes between AUTO mode reactivation
 const unsigned long int POWER_OFF_DELAY=10000; // delay 10 seconds following fan power-off
 const unsigned long int BUTTON_PRESS_DELAY=1000; // delay main loop execution 1 second to recognize button press
-bool btnManualSt, btnAutoSt;  // stores DigitalRead state
-bool autoFanStatus=OFF;  // indicates if fan is turned ON or OFF
-bool manMode=OFF, autoMode=OFF; // indicates which operation mode is currently in effect
+
+bool btnManualSt, btnAutoSt;  // stores DigitalRead states for manual and auto button presses
+bool autoFanStatus=OFF;  // indicates if fan is currently turned ON or OFF
+bool manMode=OFF, autoMode=OFF; // indicates which controller operation mode is currently in effect
 bool status;  // checks if BME280 was activated succesfully
 float temperature, humidity;  // stores data from BME sensor
 String ErrMsgManOLED = "OLED DISPLAY SWITCH CASE ERROR--M A N U A L  MODE";
@@ -43,28 +52,28 @@ String OpsMsgFrame = "*********";
 String WrongButtonMsgFrame = "_________";
 unsigned long int startMillis, currMillis, totDelay;
 enum modeType {YELLOW_FOR_MANUAL,RED_FOR_AUTO}; 
-modeType en_ModeType;
+  modeType en_ModeType;
 
 // ******************* end CONSTANTS & VARIABLES  ******************************
 
-// ******************* Declare library class objects ***************************
+// ******************* 3) Declare library class objects ************************
 Adafruit_SSD1306 display(OLED_RESET); // object for OLED display methods 
 Adafruit_BME280 bme;  // object for BME sensor's variables
+//********************* end  HEADER section ************************************
 
 SYSTEM_MODE(SEMI_AUTOMATIC); // Allows project flashing while Argon is disconnected from any wifi internet
 void setup() 
 {
   Serial.begin(9600);
 
-// 1) Initialize the I2C addr 0x3C (for the 128x64) for the OLED display
+// 1) Initialize the I2C address 0x3C to activate the OLED display (128x64 pixels)
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  
   display.display(); // show Adafruit splashscreen to OLED
   delay(1000);  // maintain display for 1 second
-  
   Serial.printf("PROGRAM AtticFanController_v3\n");
 
  /*
-  * 2) BME 280sensor : BME 280 .begin method to activate sensor 
+  * 2) BME 280sensor : Execute .begin method to activate sensor 
   */
   
     // while(!Serial);    // time to get serial running
@@ -212,6 +221,9 @@ void ML02_AUTO_OPS_SCREEN(bool inAutoMode)
   display.setTextColor(WHITE);
   display.setCursor(0,0);
   display.setRotation(ORIENT_PORTRAIT);
+  display.println(OpsMsgFrame);
+  display.printf("  MANUAL \n");     
+  display.println(OpsMsgFrame);
   display.printf("<BUTTON>\n");
   display.printf("      MODE\n");
   switch (inAutoMode)
