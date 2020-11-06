@@ -102,7 +102,7 @@
  * junction, to the emitter lead, and finally to the IN connector at the relay switch.  
  *    From there, the circuit joins up with the furnace closet extension cord that provides A/C
  * power to the attic fan. The relay switch is wired into the extension cord's hot (black) wire from 
- * the opposite side of the relay switch, into the COM (Common ground) and NO (Normally On)
+ * the opposite side of the relay switch, into the COM (Common ground) and NO (Normally Open)
  * connectors. When the Argon circuit is switched on, current travels from the relay switch and 
  * through these connectors to the two spliced ends of the hot wire, traveling to the fan along 
  * this wire, then exiting through the cord's white wire back to the outlet, to fully complete 
