@@ -1,0 +1,149 @@
+{\rtf1\ansi\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset0 Times New Roman;}}
+{\*\generator Riched20 10.0.18362}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\ul\f0\fs22\lang9 Hackster Account : Attic Fan Controller Compoents\ulnone\par
+II) Attic Fan Compartment Hardware\par
+Source: LOWES.com\par
+Item #4508Model #PBD-09-00001 5/8-in x 2-ft x 2-ft Commercial Particle Board  $4.64 \par
+Item #36439Model #GVL0107 IMPERIAL 16-in x 36-in Galvanized Steel Joist Lining  $7.98 (2)\par
+
+\pard\ri-1267\sa200\sl276\slmult1\tx9180\tx9900 Item #308961Model #20902ORXLG Gatehouse 3.5-in Bronze Die-cast Sliding Window Sash Lift $3.18\par
+Item #35136Model #B777CT40 Johns Manville Multi-Purpose R-5.33-sq ft Unfaced Fiberglass Roll Insulation (16-in W x 4-ft L) $5.90\par
+Item #63403Model #180147 Hillman 1/4-in Zinc-Plated Standard (SAE) Nylon Insert Lock Nut 0.13 (3)\par
+Item #19165Model #SP115BC Stanley-National Hardware 0.875-in x 4-in x 3.98-in Zinc-plated Flat Brace  $3.27 (3)\par
+Item #69811Model #11139 Hillman 1-3/8-in x 3-ft Interior/Exterior Zinc-Plated Steel Perforated  $5.98 (2)\par
+Item #333358Model #991210 1 x 8 x 8 PFJ Primed Board  $16.98\par
+Item #63306Model #270055 Hillman 1/4-in Zinc-Plated Standard (SAE) Flat Washer 0.13 (24)\par
+Item #61820Model #190003 Hillman 1/4-in x 1/2-in Zinc-Plated Coarse Thread Hex Bolt \par
+0.09 (24)\par
+Item #154277Model #1502104  1/2 x 2 x 4 AC/BC Fir Plywood $11.75\par
+\par
+
+\pard\sa200\sl276\slmult1 III) Attic Fan Power Cord Sheathing Hardware\par
+Source: LOWES.com\par
+Item #478822 Model #SP25NKUS  Weller Electric Lead-Free Soldering Kit $19.97\par
+Item #68996 Model #330485 NMW1  Legrand 5 Ft White PVC Channel $7.97 (3)\par
+Item #69112 Model #363145 NMW6  Legrand WM White Flat Elbow $4.47\par
+Item #69613 Model #363148 NMW910 Legrand WMOLD Accessory Pack $3.47 (2)\par
+ \par
+\ul Elevator Pitch (140 char max)\par
+\ulnone\tab Argon microcontroller converts a 3-speed floor fan into a whole-house air circulation system. Buttons select manual/auto fan operation.\par
+\ul Hackster.Io Story\ulnone\par
+\f1\tab  This project repurposes a hi-\b p\b0 ower 3-\b s\b0 peed floor fan for its new role as a whole house attic fan. Fan power is provided by constructing  an active \b m\b0 ode PNP circuit connected to a relay switch, powered by an Argon Microcontroller. The fan circulates air throughout the house, concentrating into a custom-\b b\b0 uilt ceiling compartment that houses the fan,  which fans air out into the attic space, which then exits via open garage windows. \par
+\tab The Argon is programmed for manual and automatic fan control operation. Manual mode operates just like an on-\b o\b0 ff switch. Automatic mode continuously checks for interior temperature or humidity exceeding their programmed thresholds beforing powering on the fan. Separate OLED screens show programmed menu button options to navigate and select the desired  mode. \par
+\tab Once completing a working breadboard circuit, I began related work to complete the finalportion of the circuit: splicing the extension cord and soldering the spliced ends into the extended 14 ga wires connected to the COM ans NO conections of the tested breadboard circuit. After connecting the breaboard to the A/C circuit, I confirmed the fully completed circuit worked for manual andauto modes on Nov 6. This required plugging in a phone cord adapter cable from ther furnace closet power strip outlet to the microcontroller, for supplying power to the Argon, as well as connecting the fan's newly constructed power cord into the power strip to supply power to the fan, thus completing the entire circuit. The final phase of the project, constructing and installing PVC sheathing for the exposed power cord was completed on Nov. 11.\par
+\ul PROJECT DEVELOPMENT & TIMELINE\ulnone\par
+\tab Development actually began prior to the start of the bootcamp on July 6. The project's first step involved constructing a plywood compartment to house the fan inside the existing swamp cooler air duct chamber. Compartment construction started in late May, finishing in late September, where the fan was successfully installed into the finished compartment.  Having finished the compartment, fan cooling testing began for confirming  that the house could be comfortably cooled down in the evenings, overnight and through morning. Fan testing extended from Sep 24-27. Results were successful, often reducing the temperature 9-10 degrees overnight through approx 10-11A next morning, when windows were shut and regular A/C was turned on.\par
+\tab Next, circuit design and circuit programming began the last week of September, starting with lab book circuit diagram, finishing with first draft Fritzing circuit diagram, and followed by initial lab book OLED display layouts. Breadboard circuit wiring began at the end of September after completing the first draft Fritzing diagram. During the first week of October, more hands on construction and testing took place for building the 15 ft long extension cord providing power from the nearby furnace closet outlet to the fan compartment, located nearby on the hallway ceiling. During the second week, first-configuration breadboard circuit was completed, followed by first draft programming logic revisions. C++ program logic revisions, debugging, testing and documentation continued throughweeks three and four (see above, section "Modifications") to ensure the circuit and button programming worked according to specs. During week three, I created the Github repository (AT-AtticFanController) to push completed separate versions of the C++ driver program, AtticFanController.\par
+\tab Once completing a working breadboard circuit, I began related work to complete the final portion of the circuit: splicing the extension cord and soldering the spliced ends into the extended 14 ga wires connected to the COM ans NO conections of the tested breadboard circuit. After connecting the breaboard to the A/C circuit, I confirmed the fully completed circuit worked for manual andauto modes on Nov 6. This required plugging in a phone cord adapter cable from ther furnace closet power strip outlet to the microcontroller, for supplying power to the Argon, as well as connecting the fan's newly constructed power cord into the power strip to supply power to the fan, thus completing the entire circuit. The final phase of the project, constructing and installing PVC sheathing for the exposed power cord was completed on Nov. 11.\par
+ \ul  ESSENTIAL PROJECT CIRCUIT COMPONENTS\par
+\ulnone  These are the components for the programmed circuit:\par
+  1) Particle Argon Microcontroller\par
+\tab This is the processing unit controlling all its connected devices listed below that construct the project circuit. The 32-bit main processor runs at 64 MHz, offering WI-FI, Bluetooth & cellular network connections. Has its own OS, is used world-wide, and allows easy prototype-to-production source code options. Also has an expansive pin configuration for communicating with other devices, including up to 20 digital pins, 6 analog-to-digital conversion pins, and up to 13 analog pins. It's powered on 3.3 volts, with optional 5 volt capacity (a feature critical to this project).  \par
+  2) Yellow & Red buttons\par
+ \tab When pressed, these buttons complete a digital input circuit with the Argon to communicate the user's selected operation mode, and when it's currently activated and deactivated.\par
+  3) SSD 1306 OLED display (Adafruit)\par
+\tab This interface device, complete with its own library of programmable subroutines,  communicates all essential information to users. It features menu-driven screens for selecting the operating mode (manual or auto), current BME sensor readings for temperature and humidity (and their programmed thresholds automatically triggering fan operation), and error button press messages during operation. This display screen, approximately 3/4"x1", uses an I2C serial  communication protocol (being slaved off of the BME sensor). In this project, the display is  programmed in portrait mode with a maximum 16 lines, at 10 characters per line, totaling 160 displayable characters. \par
+  4) BME 280 sensor (Adafruit)\par
+\tab This tiny device (approx 1/2" square) also features a complete libary of programmable routines, has sensing capabilities for temperature (in C), humidity and air pressure. For this project, its I2C serial communication data and clock pins are slaved directly from the Argon's corresponding SDA (data) and SCL (clock) pins. It features rapid, reliable sensing capability.\par
+  5) Relay Switch (Songle)\par
+\tab This switch is used to safely control an electrical device, such as the attic fan requiring  higher current or higher voltage, from a mocrocontroller. The switch contains an electro-magnetic control coil, coming in contact with a switch powered from a digital pin on the Argon, that closes the circuit from the Argon.   \par
+  6) PNP Transistor 2N3906\par
+\tab This bipolar junction transistor consists of a single N-type semi-conductor material (having surplus negative-charged carrier electons) sandwiched in between two P-type semiconductor material (having surplus positive-charged particles), with leads (legs) attached to each section.  The middle lead is the base, with outer leads known as collector and emitter. This transistor has two PN junctions: base-collector, and base-emitter. Transistors often function as switches for integrated circuits, but our project circuit uses it as a current amplifier to supply current to the relay switch.\par
+\ul HOW THE PROJECT CIRCUIT WORKS \ulnone\par
+\tab Activating the attic fan is largely dependent on the current generated within the input circuit through the transistor and through the output circuit and on to the relay switch. The circuit's base-emitter junction is critical for generating the current. In this project circuit, a manual button press or automated activation sends output current from digital pin (D7). This current is pushed by a smaller amount of voltage (metered just under 3V) along its circuit to the transistor's base lead, at which point this very small current then combines with higher current pushed from by the Argon's VUSB pin(metered at 5V) along the transistor's base-emitter junction, to the emitter lead, and finally to the IN connector at the relay switch.  \par
+\tab From there, the circuit joins up with the furnace closet extension cord that provides A/C power to the attic fan. The relay switch is wired into the extension cord's hot (black) wire from the opposite side of the relay switch, into the COM (Common ground) and NO (Normally Open) connectors. When the Argon circuit is switched on, current travels from the relay switch and through these connectors to the two spliced ends of the hot wire, traveling to the fan motor along this wire, then exiting through the cord's white wire back to the outlet, to fully complete the circuit and power the fan. Then a reversal takes place: Current flows through the white wire into the fan, then exits out through the black wire (via the relay switch connection) as it exits back to the outlet. This A/C cycle is repeated 60 times per second. \par
+\tab The project's circuit operates in ACTIVE mode, where the transistor acts to amplify the current at the base-emitter junction through to the relay switch. Active mode can occur when voltage at the base-emitter junction reaches .7V (metered as .749V), and with only a very small base current relative to the emitter current (metered at 180 mV at the base-emitter junction). The relationship between emitter versus base current is known as DC current gain. Typical ratios can vary between 50-200, where the project circuit is calculated at 138 mA.\par
+\ul BASIC BUTTTON OPERATION\ulnone\par
+\tab The major programming focus is simple, consistent operation, where the two major modes, manual and auto, work identically. Manual mode simply means pressing the yellow button to instantly switch ON the fan; pressing the same button again switches OFF the fan. Auto mode means pressing the red button to instantly activate continuous threshold level checks for temperature and humidity. At anytime when the sensor detects either temperature OR humidity readings at/above threshold, the fan is switched ON. At anytime when readings fall below both thresholds, the fan is switched OFF. Pressing the red button again instantly deactivates threshold checks. Threshold checks are presently set within the driver program (an advanced revision would allow threshold adjustments by button press, like on a thermostat). \par
+\ul OLED DISPLAY SCREENS\ulnone\par
+     There are three separate OLED display screens, and are programmed for activation based on user button presses. A pair of YELLOW button presses (for switching on and off the fan) displays the same "Manual" OLED screen. A pair of RED button presses displays the "Auto" OLED screen. Either mode screens allows simple navigation to the alternate mode. However, a second button press for the button opposite from the first button press displays the Error press OLED screen. \par
+The layout for each operation mode screen is described below:\par
+I) MANUAL mode OLED screen\par
+ \tab This screen appears when the driver program starts. From top to bottom lines, it consists of three major components: \par
+   -Operation mode ID line, \par
+   -Mode navigation header lines, \par
+   -Mode navigation option selection lines (with manual mode selections appearing first). \par
+Here is a detailed breakdown for each line of the three components:\par
+
+\pard\sl240\slmult1   1) Header screen ID line, appearing as:  \par
+    "  MANUAL  "\par
+
+\pard\sa200\sl276\slmult1   2) Button color (left-justified) and operation mode header labels (right-justified):\par
+
+\pard\sl240\slmult1     " <BUTTON> \par
+            MODE "\par
+
+\pard\sa200\sl276\slmult1 This layout style employs placing headers, normally adjacent on a single line, to be staggered over two lines, compensating for the OLED display's space restrictions. The button color header is delimited by angle brackets, <>, visually distinguishing it from the op mode header label.\par
+  3) Button color name and operation mode switch names associated for MANUAL mode:\par
+
+\pard\sl240\slmult1     " <YELLOW>\par
+            OFF\par
+          MANUAL "\par
+
+\pard\sa200\sl276\slmult1\tab This layout inherits multiple features from the staggered header lines, including labels justified and lining up under their associated headers, angle brackets for the button color name, and both switch names right-justified on separate lines for clear association. Valid selections are "OFF" or "MANUAL", while highlighting the active selection "MANUAL" upon button press. \par
+  4) Button color name and operation mode switch names associated for AUTO mode:\par
+
+\pard\sl240\slmult1     " <RED> AUTO "\par
+
+\pard\sa200\sl276\slmult1 Layout features here also inherit those from the header line. These are also both valid selections, one of which to be activated by pressing the RED button.      \par
+  II) AUTOMATIC mode OLED screen\par
+\tab This mode uses the entire 16 lines to display mode-related info. From top to bottom lines, it consists of five major components: \par
+   -Operation mode ID line, \par
+   -Mode navigation header lines, \par
+   -Mode navigation option selection lines (with auto mode selections appearing first)\par
+   -BME temperature & humidity sensor data: separate lines for the two threshold settings, \par
+     followed by the two sensor readings\par
+   -Prep-related reminder instructions for opening the attic access door & house windows for proper air circulation\par
+
+\pard\sl240\slmult1   1) Header screen ID line, appearing as:  \par
+    "   AUTO   "\par
+  2) Button color (left-justified) and operation mode header labels (right-justified):\par
+    " <BUTTON> \par
+            MODE "\par
+  3) Button color name and the opposing operation mode switch associated for AUTO mode:\par
+    " <RED> OFF "\par
+
+\pard\sa200\sl276\slmult1    The active, highlighted selection upon button press is <RED>.\par
+  4) Button color name and operation mode switch names associated for MANUAL mode:\par
+
+\pard\sl240\slmult1     " <YELLOW> "\par
+  5) Two lines for header labels displaying programmed temperature & humidity settings,   followed by a third line displaying their values:\par
+    "  TEMP HUM "\par
+    "  SETTINGS "\par
+    "  99    99 " \par
+
+\pard\sa200\sl276\slmult1   6) One line for a summary header label for displaying sensor readings of temperature & humidity settings, followed by a second line displaying actual readings:  \par
+
+\pard\sl276\slmult1    " SENSOR "  \par
+
+\pard\sl240\slmult1       "  99   99 " \par
+
+\pard\sa200\sl276\slmult1   7) Four lines for drawing attention to and displaying reminder instructions for necessary prep-related duties:\par
+
+\pard\sl240\slmult1     " !!!!!!!!!! " \par
+    " OPEN WIDE "\par
+    " ATTIC DOOR " \par
+    " & WINDOWS "\par
+
+\pard\sa200\sl276\slmult1 These esential prep steps can be overlooked in auto mode because the fan may not be immediately activated (and which serves as the definitive reminder).  \par
+  III) ERROR Press OLED screen\par
+\tab This screen appears when the button colors from the two consecutive button presses do not match; in effect, the user does not correctly toggle OFF the intial operating mode after toggling it ON. One of two separate error screens appear, depending on the press sequence:\par
+
+\pard\sl240\slmult1   1) If the YELLOW button is first pressed         2) If the RED button is first pressed \par
+  initating MANUAL mode, followed by a   \tab initating AUTO mode, followed by a YELLOW \par
+RED button press (AUTO mode), this screen \tab button press (MANUAL mode), this screen\par
+appears:          \tab\tab\tab\tab\tab  appears:\par
+   "  PRESS  "                                       "  PRESS  "\par
+   "  YELLOW "                                       "   RED "\par
+  "  BUTTON "                                     "  BUTTON " \par
+      " TO "                                                 "  TO "\par
+   "  RETURN "                                     "  RETURN "\par
+      " TO "                                                  " TO "\par
+   "  MANUAL "                                     "  AUTO "\par
+     " MODE "                                           " MODE "\par
+\par
+In either case, following the instruction returns the user back to the previous op mode and switch position.\par
+
+\pard\sa200\sl276\slmult1  \tab  \par
+}
+ 

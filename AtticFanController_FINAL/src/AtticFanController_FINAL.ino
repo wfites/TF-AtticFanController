@@ -2,12 +2,21 @@
  * Project AtticFanController_FINAL
  * Description:
  *  This is a post-IoT Bootcamp project following the Cohort 2 graduation on Sep 11, 2020.
- * This project focuses on repurposing the house utility floor fan for its new role as a whole 
- * house attic fan. Specifically, the purpose of the project is to construct a circuit using the 
- * Argon microcontroller to operate a Utilitech Pro 20" high velocity floor fan (model #SFD1-500B) 
- * for the purpose of distributing cool air throughout the entire house for the spring and fall 
- * seasons. The fan has 3 speeds, with a maximum air movement of 4500 CFM. 
- 
+ *  This project repurposes a hi-power 3-speed floor fan for its new role as a whole house attic 
+ * fan. Power for the fan is provided by constructing an active-mode PNP circuit connected to a 
+ * relay switch, powered by an Argon Miccrocontroller. The fan circulates air throughout the house,
+ * concentrating into a custom-built ceiling compartment that houses the fan, which fans air out 
+ * into the attic space, and then exited via open garage windows.
+ * 	The Argon is programmed with manual and automatic operating modes for fan control. Manual 
+ * mode operates just like an on-off switch. Automatic mode continuously checks for interior 
+ * temperature or humidity exceeding their programmed thresholds beforing powering on the fan. 
+ * Separate OLED screens show programmed menu options to operate buttons for selecting the active 
+ * operation mode.
+ *  	The controller, active-mode PNP circuit and relay switch components can be adapted for 
+ * controlling a variety of household A/C appliances, such as ceiling fans and electric heaters, 
+ * whenever the relay switch circuit can be spliced into the device's hot wire of the power cord. 
+
+ *
  * Author: Ted Fites
  * 
  * Modifications:
@@ -17,211 +26,8 @@
  * 10/25/20   TF Completed v#2. Includes tested functionality for controller AUTO mode complimentary
  *              to MANUAL mode. Also transferred circuit from Argon breadboard to small breakout board
  *              (2"x6") for added wiring space & to eliminate short circuits on Argon board.
- * 10/14/20   TF Created program. Includes tested functionality for controller MANUAL mode.
+ * 10/14/20   TF Created program. Includes tested intial functionality for controller MANUAL mode.
  *
- * PROJECT DEVELOPMENT & TIMEFRAME
- *    Development actually began prior to the start of the bootcamp on July 6. The project's first 
- * step involved constructing a plywood compartment to house the fan inside the existing swamp 
- * cooler air duct chamber. Compartment construction started in late May, finishing in late 
- * September, where the fan was successfully installed into the finished compartment.  
- * Having finished the compartment, fan cooling testing began for confirming  that the house could
- * be comfortably cooled down in the evenings, overnight and through morning. Fan testing 
- * extended from Sep 24-27. Results were successful, often reducing the temperature 9-10 degrees 
- * overnight through approx 10-11A next morning, when windows were shut and regular A/C was turned 
- * on.
- *    Next, circuit design and circuit programming began the last week of September, starting 
- * with lab book circuit diagram, finishing with first draft Fritzing circuit diagram, and 
- * followed by initial lab book OLED display layouts. Breadboard circuit wiring began at the end 
- * of September after completing the first draft Fritzing diagram. 
- *    During the first week of October, more hands on construction and testing took place for 
- * building the 15 ft long extension cord proving power from the nearby furnace closet outlet to 
- * the fan compartment, located nearby on the hallway ceiling. During the second week, 
- * first-configuration breadboard circuit was completed, followed by first draft programming logic 
- * revisions. C++ program logic revisions, debugging, testing and documentation continued through
- * weeks three and four (see above, section "Modifications") to ensure the circuit and button 
- * programming worked according to specs. During week three, I created the Github repository 
- * (AT-AtticFanController) to push completed separate versions of the C++ driver program, 
- * AtticFanController.
- *    Once completing a working breadboard circuit, project development was redirected to
- * splicing the extension cord into the tested breadboard circuit. [ TO BE COMPLETED]
- * 
- * ESSENTIAL PROJECT CIRCUIT COMPONENTS
- *  These are the components for the programmed circuit:
- * 1) Particle Argon Microcontroller
- *    This is the processing unit controlling all its connected devices listed below that
- * construct the project circuit. The 32-bit main processor runs at 64 MHz, offering
- * WI-FI, Bluetooth & cellular network connections. Has its own OS, is used world-wide, and allows 
- * easy prototype-to-production source code options. Also has an expansive pin configuration for 
- * communicating with other devices, including up to 20 digital pins, 6 analog-to-digital 
- * conversion pins, and up to 13 analog pins. It's powered on 3.3 volts, with optional 5 volt 
- * capacity (a feature critical to this project).
- * 
- * 2) Yellow & Red buttons
- *  When pressed, these buttons complete a digital input circuit with the Argon to communicate
- * the user's selected operation mode, and when it's currently activated and deactivated.
- 
- * 3) SSD 1306 OLED display (Adafruit)
- *    This interface device, complete with its own library of programmable subroutines,  
- * communicates all essential information to users. It features menu-driven screens for selecting 
- * the operating mode (manual or auto), current BME sensor readings for temperature and humidity  
- * (and their programmed thresholds automatically triggering fan operation), and error button 
- * press messages during operation. This display screen, approximately 3/4"x1", uses an I2C serial 
- * communication protocol (being slaved off of the BME sensor). In this project, the display is 
- * programmed in portrait mode with a maximum 16 lines, at 10 characters per line, totaling 160 
- * displayable characters. 
- * 
- * 4) BME 280 sensor (Adafruit)
- *    This tiny device (approx 1/2" square) also features a complete libary of programmable 
- * routines, has sensing capabilities for temperature (in C), humidity and air pressure. For this
- * project, its I2C serial communication data and clock pins are slaved directly from the Argon's
- * corresponding SDA (data) and SCL (clock) pins. It features rapid, reliable sensing capability.
- * 
- * 5) Relay Switch (Songle)
- *    This switch is used to safely control an electrical device, such as the attic fan requiring 
- * higher current or higher voltage, from a mocrocontroller. The switch contains an electro-
- * magnetic control coil, coming in contact with a switch powered from a digital pin on the
- * Argon, that closes the circuit from the Argon. 
- * 
- * 6) PNP Transistor 2N3906
- *    This bipolar junction transistor consists of a single N-type semi-conductor material (having 
- * surplus negative-charged carrier electons) sandwiched in between two P-type semiconductor 
- * material (having surplus positive-charged particles), with leads (legs) attached to each 
- * section.  The middle lead is the base, with outer leads known as collector and emitter. This 
- * transistor has two PN junctions: base-collector, and base-emitter. Transistors often function 
- * as switches for integrated circuits, but our project circuit uses it as a current amplifier to 
- * supply current to the relay switch.
- * 
- * HOW THE PROJECT CIRCUIT WORKS 
- *    Activating the attic fan is largely dependent on the current generated within the input circuit 
- * through the transistor and through the output circuit and on to the relay switch. The circuit's 
- * base-emitter junction is critical for generating the current. In this project circuit, a manual 
- * button press or automated activation sends output current from digital pin (D7). This current 
- * is pushed by a smaller amount of voltage (metered just under 3V) along its circuit to the 
- * transistor's base lead, at which point this very small current then combines with higher 
- * current pushed from by the Argon's VUSB pin(metered at 5V) along the transistor's base-emitter 
- * junction, to the emitter lead, and finally to the IN connector at the relay switch.  
- *    From there, the circuit joins up with the furnace closet extension cord that provides A/C
- * power to the attic fan. The relay switch is wired into the extension cord's hot (black) wire from 
- * the opposite side of the relay switch, into the COM (Common ground) and NO (Normally Open)
- * connectors. When the Argon circuit is switched on, current travels from the relay switch and 
- * through these connectors to the two spliced ends of the hot wire, traveling to the fan along 
- * this wire, then exiting through the cord's white wire back to the outlet, to fully complete 
- * the circuit and power the fan. Then a reversal takes place: Current flows through the white 
- * wire into the fan, then exits out through the black wire (via the relay switch connection) as 
- * it exits back to the outlet. This A/C cycle is repeated 60 times per second. 
- *    The project's circuit operates in ACTIVE mode, where the transistor acts to amplify the 
- * current at the base-emitter junction through to the relay switch. Active mode can occur when 
- * voltage at the base-emitter junction reaches .7V (metered as .749V), and with only a very small 
- * base current relative to the emitter current (metered at 180 mV at the base-emitter junction). 
- * The relationship between emitter versus base current is known as DC current gain. Typical 
- * ratios can vary between 50-200, where the project circuit is calculated at 138 mA.
- *  
- * 
- * BASIC BUTTTON OPERATION
- *    The major programming focus is simple, consistent operation, where the two major modes, 
- * manual and auto, work identically. Manual mode simply means pressing the yellow button to 
- * instantly switch ON the fan; pressing the same button again switches OFF the fan. Auto mode 
- * means pressing the red button to instantly activate continuous threshold level checks for 
- * temperature and humidity. At anytime when the sensor detects either temperature OR humidity 
- * readings at/above threshold, the fan is switched ON. At anytime when readings fall below both 
- * thresholds, the fan is switched OFF. Pressing the red button again instantly deactivates 
- * threshold checks. Threshold checks are presently set within the driver program (an advanced 
- * revision would allow threshold adjustments by button press, like on a thermostat). 
- * 
- * OLED DISPLAY SCREENS
- *    There are three separate OLED display screens, and are programmed for activation based on
- * user button presses. A pair of YELLOW button presses (for switching on and off the fan) displays 
- * the same "Manual" OLED screen. A pair of RED button presses displays the "Auto" OLED screen. 
- * Either mode screens allows simple navigation to the alternate mode. However, a second button 
- * press for the button opposite from the first button press displays the Error press OLED screen. 
- * The layout for each operation mode screen is described below:
- * I) MANUAL mode OLED screen
- *    This screen appears when the driver program starts. From top to bottom lines, it consists 
- * of three major components: 
- *  -Operation mode ID line, 
- *  -Mode navigation header lines, 
- *  -Mode navigation option selection lines (with manual mode selections appearing first). 
- * Here is a detailed breakdown for each line of the three components:
- * 1) Header screen ID line, appearing as:  
- *   " * MANUAL * "
- * 2) Button color (left-justified) and operation mode header labels (right-justified):
- *   " <BUTTON> 
- *           MODE "
- *  This layout style employs placing headers, normally adjacent on a single line, to be staggered 
- * over two lines, compensating for the OLED display's space restrictions. The button color header 
- * is delimited by angle brackets, <>, visually distinguishing it from the op mode header.
- * 3) Button color name and operation mode switch names associated for MANUAL mode:
- *   " <YELLOW>
- *           OFF
- *         MANUAL "
- *  This layout inherits multiple features from the staggered header lines, including names 
- * justified and lining up under their associated headers, angle brackets for the button color
- * name, and both switch names right-justified on separate lines for clear association. Valid
- * selections are "OFF" or "MANUAL", while highlighting the active selection "MANUAL" upon button 
- * press. 
- * 4) Button color name and operation mode switch names associated for AUTO mode:
- *   " <RED> AUTO "
- *  Layout features here also inherit those from the header line. These are also both valid 
- * selections, one of which to be activated by pressing the RED button. 
- *    
- * II) AUTOMATIC mode OLED screen
- * This mode uses the entire 16 lines to display mode-related info. From top to bottom lines, it 
- * consists of five major components: 
- *  -Operation mode ID line, 
- *  -Mode navigation header lines, 
- *  -Mode navigation option selection lines (with auto mode selections appearing first)
- *  -BME temperature & humidity sensor data: separate lines for the two threshold settings, 
- *    followed by the two sensor readings
- *  -Prep-related reminder instructions for opening the attic access door & house windows for 
- * proper air circulation
- * 1) Header screen ID line, appearing as:  
- *   " *  AUTO  * "
- * 2) Button color (left-justified) and operation mode header labels (right-justified):
- *   " <BUTTON> 
- *           MODE "
- * 3) Button color name and the opposing operation mode switch associated for AUTO mode:
- *   " <RED> OFF "
- *  The active, highlighted selection upon button press is <RED>.
- * 4) Button color name and operation mode switch names associated for MANUAL mode:
- *   " <YELLOW> "
- * 5) Two lines for header labels displaying programmed temperature & humidity settings, 
- *  followed by a third line displaying their values:
- *   "  TEMP HUM "
- *   "  SETTINGS "
- *   "  99    99 " 
- * 6) One line for a summary header label for displaying sensor readings of temperature & 
- * humidity settings, followed by a second line displaying actual readings:
- *    " SENSOR " 
- *   "  99   99 " 
- * 7) Four lines for drawing attention to and displaying reminder instructions for necessary
- * prep-related duties:
- *   " !!!!!!!!!! " 
- *   " OPEN WIDE "
- *   " ATTIC DOOR " 
- *   " & WINDOWS "
- *  These esential prep steps can be overlooked in auto mode because the fan may not be 
- * immediately activated (and which serves as the definitive reminder).
- * 
- * III) ERROR Press OLED screen
- *  This screen appears when the button colors from the two consecutive button presses do not 
- * match; in effect, the user does not correctly toggle OFF the intial operating mode after 
- * toggling it ON. One of two separate error screens appear, depending on the press sequence:
- * 1) If the YELLOW button is first pressed         2) If the RED button is first pressed 
- * initating MANUAL mode, followed by a RED button  initating AUTO mode, followed by a YELLOW 
- * press (AUTO mode), this screen appears:          button press (MANUAL mode), this screen appears:
- *  "  PRESS  "                                       "  PRESS  "
- *  "  YELLOW "                                       "   RED "
-*  "  BUTTON "                                        "  BUTTON " 
- *     " TO "                                            " TO "
- *  "  RETURN "                                       "  RETURN "
- *     " TO "                                            " TO "
- *  "  MANUAL "                                        "  AUTO "
- *    " MODE "                                          " MODE "
- *  In either case, following the instruction returns the user back to the previous op mode and
- * switch position.
- * 
- * PROGRAMMING THE CIRCUIT   
- *  See comments embedded within the main loop logic 
  */
 //************************************* HEADER section ***************************************
 //********************* 1) Declare program header library files ******************************
